@@ -1,0 +1,499 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Games API",
+    "description": "My Games API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "Game": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "release_date": {
+            "type": "string"
+          },
+          "developed_by": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "number",
+            "format": "float"
+          },
+          "rating": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "GamesResponse": {
+        "type": "object",
+        "properties": {
+          "bookRequest": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Game"
+            }
+          }
+        }
+      },
+      "Companion": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "in_game_class": {
+            "type": "string"
+          },
+          "debut": {
+            "type": "string",
+            "format": "date"
+          },
+          "is_romance":{
+            "type": "boolean"
+          }
+        }
+      },
+      "CompanionResponse": {
+        "type": "object",
+        "properties": {
+          "bookRequest": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Companion"
+            }
+          }
+        }
+      },
+      "uuid": {
+        "properties": {
+          "uuid": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Games",
+      "description": "Games API"
+    },
+    {
+      "name": "Companions",
+      "description": "Companions API"
+    }
+  ],
+  "paths": {
+    "/games": {
+      "get": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Returns a list of games.",
+        "description": "Returns all games in the database.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GamesResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Creates a game",
+        "description": "Creates a game",
+        "requestBody": {
+          "description": "Game Request Post Object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Game"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/uuid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/games/{uuid}": {
+      "get": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Returns only one game by uuid.",
+        "description": "Return only one game by UUID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "uuid",
+            "required": true,
+            "description": "Game Request uuid",
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Game"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed. Wrong data."
+          },
+          "404": {
+            "description": "Failed. Game was not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Games"
+        ],
+        "summary": "Fully changes game data.",
+        "description": "Fully change info about game",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "uuid",
+            "required": true,
+            "description": "Game Request uuid",
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Game Request Object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Game"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Game"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed. Wrong data"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Partly changes game data.",
+        "description": "Partly Changes Game",
+        "tags": [
+          "Games"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "uuid",
+            "required": true,
+            "description": "Game Request uuid",
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Game Request Object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Game"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Game"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed. Wrong data."
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletes game.",
+        "description": "Delete Game Request",
+        "tags": [
+          "Games"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "uuid",
+            "required": true,
+            "description": "Game Request uuid",
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/uuid"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Failed. Game was not found."
+          }
+        }
+      }
+    },
+    "/companions": {
+      "get": {
+        "summary": "Returns list of all companions.",
+        "tags": [
+          "Companions"
+        ],
+        "description": "Returns List of all Companions",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanionResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Companions"
+        ],
+        "summary": "Creates new companion.",
+        "description": "Creates new Companion",
+        "requestBody": {
+          "description": "Companion Request Post Object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Companion"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/uuid"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/companions/{uuid}": {
+      "get": {
+        "tags": [
+          "Companions"
+        ],
+        "summary": "Returns only one Companion by uuid",
+        "description": "Returns only one Companion by uuid",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "uuid",
+            "required": true,
+            "description": "Companion Request uuid",
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Failed. Wrong data."
+          },
+          "404": {
+            "description": "Failed. Game was not found."
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Companions"
+        ],
+        "summary": "Fully change on Companion.",
+        "description": "Fully change on Companion.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "uuid",
+            "required": true,
+            "description": "Companion Request uuid",
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Companion Request Object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Companion"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Failed. Wrong data."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Companions"
+        ],
+        "summary": "Partly changes one Companion.",
+        "description": "Partly changes one Companion.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "uuid",
+            "required": true,
+            "description": "Companion Request uuid",
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Companion Request Object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Companion"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Failed. Wrong data."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Companions"
+        ],
+        "summary": "Deletes one Companion.",
+        "description": "Deletes one Companion.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "uuid",
+            "required": true,
+            "description": "Companion Request uuid",
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Gailed. Companion was not found."
+          }
+        }
+      }
+    }
+  }
+}
+
